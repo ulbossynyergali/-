@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMIÈRE D'OR | Авторизация</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #cba258;
+            --black: #1a1a1a;
+            --cream: #fdfaf5;
+            --border: #e5d5c5;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--cream);
+            color: var(--black);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+
+
+            /* ЖАҢА ФОНДЫҚ БӨЛІМ (Мәрмәр текстурасы) */
+            background-image: linear-gradient(rgba(253, 250, 245, 0.3), rgba(253, 250, 245, 0.3)), 
+                            url('https://posiflora.com/wp-content/uploads/2025/02/ad_4nxdidovcrvbaqwqwp7akdrdqlmreqhczboawvjaz49xhs_-pkfzascvwrijvs9tiexudhwygpa0xeix-c0z0mr5xkwidehpnrqtoct42psjwep3kxehnphd4sxm1btxfpp7guu_4lq.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Dark Theme Styles */
+        body.dark-theme {
+            --cream: #121212;
+            --black: #ffffff;
+            --border: #333333;
+            background-image: linear-gradient(rgba(18, 18, 18, 0.8), rgba(18, 18, 18, 0.8)), 
+                            url('https://posiflora.com/wp-content/uploads/2025/02/ad_4nxdidovcrvbaqwqwp7akdrdqlmreqhczboawvjaz49xhs_-pkfzascvwrijvs9tiexudhwygpa0xeix-c0z0mr5xkwidehpnrqtoct42psjwep3kxehnphd4sxm1btxfpp7guu_4lq.jpg');
+        }
+
+        body.dark-theme .auth-container, 
+        body.dark-theme .modal-content {
+            background: #1a1a1a;
+            border-color: #444;
+        }
+
+        body.dark-theme input {
+            background: #252525;
+            color: white;
+        }
+
+        body.dark-theme .logo, body.dark-theme h2 {
+            color: white;
+        }
+
+        /* Режим ауыстырғыш батырма стилі */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--black);
+            color: var(--cream);
+            border: 1px solid var(--gold);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        /* Қараңғы режимдегі батырмалар мен элементтер */
+        body.dark-theme .btn-main {
+            background: var(--gold); /* Алтын түсті батырма */
+            color: var(--black);
+        }
+
+        body.dark-theme .btn-main:hover {
+            background: #b58d46;
+            color: white;
+        }
+
+        /* Құпия сөз өрісіндегі иконка стилі */
+        .pass-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        #generatePass {
+            position: absolute;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--gold);
+            cursor: pointer;
+            font-size: 16px;
+            display: none; /* Бастапқыда жасыру */
+            transition: 0.3s;
+        }
+
+        #generatePass:hover {
+            transform: scale(1.2);
+            color: var(--black);
+        }
+
+        body.dark-theme #generatePass:hover {
+            color: white;
+        }
+
+
+
+        .auth-container {
+            background: white;
+            padding: 50px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-size: 26px;
+            letter-spacing: 5px;
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 700;
+            display: block;
+            margin-bottom: 30px;
+        }
+
+        .logo span { color: var(--gold); }
+
+        h2 {
+            font-family: 'Cinzel', serif;
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 18px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid var(--border);
+            background: var(--cream);
+            font-family: 'Montserrat';
+            font-size: 12px;
+            letter-spacing: 1px;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--gold);
+            background: white;
+        }
+
+        /* Сурет жүктеу стилі */
+        .file-label {
+            display: block;
+            text-align: left;
+            font-size: 10px;
+            color: #888;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        #regFields {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-main {
+            background: var(--black);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 18px;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 3px;
+            font-size: 12px;
+            margin-top: 15px;
+            transition: 0.4s;
+        }
+
+        .btn-main:hover { background: var(--gold); }
+
+        .toggle-link {
+            margin-top: 25px;
+            font-size: 11px;
+            color: #888;
+        }
+
+        .toggle-link a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--cream);
+            padding: 50px;
+            border: 1px solid var(--gold);
+            text-align: center;
+            max-width: 350px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="auth-container">
+    <a href="index.html" class="logo">LUMIÈRE <span>D'OR</span></a>
+    <h2 id="authTitle">Кіру</h2>
+
+    <div class="input-group">
+        <input type="text" id="login" placeholder="ПАЙДАЛАНУШЫ ЕСІМІ" list="usersList" autocomplete="off">
+        <datalist id="usersList"></datalist>
+    </div>
+
+    <div id="regFields">
+        <div class="input-group">
+            <input type="email" id="email" placeholder="ЭЛЕКТРОНДЫ ПОШТА">
+        </div>
+        <div class="input-group">
+            <input type="tel" id="phone" placeholder="ТЕЛЕФОН (+7)">
+        </div>
+        <div class="input-group">
+            <label class="file-label">Профиль суретін таңдаңыз:</label>
+            <input type="file" id="profilePic" accept="image/*">
+        </div>
+        
+    </div>
+
+    <div class="input-group">
+        <div class="pass-wrapper">
+            <input type="password" id="pass" placeholder="ҚҰПИЯ СӨЗ">
+            <button type="button" id="generatePass" title="Құпия сөз генерациялау">
+                <i class="fas fa-magic"></i>
+            </button>
+        </div>
+        <div id="passStrength" style="font-size: 10px; text-align: left; margin-top: 5px; color: #888;"></div>
+    </div>
+
+    <button class="btn-main" id="mainBtn">ЕНУ</button>
+
+    <div class="toggle-link">
+        <span id="toggleText">АККАУНТ ЖОҚ ПА?</span>
+        <a href="#" id="toggleAuth">ТІРКЕЛУ</a>
+    </div>
+</div>
+
+<div id="statsModal" class="modal-overlay">
+    <div class="modal-content">
+        <h3>ҚОШ КЕЛДІҢІЗ</h3>
+        <p id="timeResult" style="font-size: 13px; margin: 10px 0;"></p>
+        <p id="errorResult" style="font-size: 13px; margin-bottom: 20px; color: #888;"></p>
+        <button class="btn-main" onclick="window.location.href='/home/'">КАТАЛОГҚА ӨТУ</button>
+    </div>
+</div>
+
+<script>
+    let isLoginMode = true;
+    let errorCount = 0;
+    let startTime = Date.now();
+
+    // DOM элементтерін алу
+    const mainBtn = document.getElementById('mainBtn');
+    const toggleAuth = document.getElementById('toggleAuth');
+    const authTitle = document.getElementById('authTitle');
+    const regFields = document.getElementById('regFields');
+    const toggleText = document.getElementById('toggleText');
+    const passInput = document.getElementById('pass');
+    const genBtn = document.getElementById('generatePass');
+    const strengthText = document.getElementById('passStrength');
+
+    // 1. ТЕМАНЫ АУЫСТЫРУ (DARK/LIGHT MODE)
+    const themeBtn = document.createElement('button');
+    themeBtn.id = 'theme-toggle';
+    themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+    document.body.appendChild(themeBtn);
+
+    const setTheme = (isDark) => {
+        if (isDark) {
+            document.body.classList.add('dark-theme');
+            themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            localStorage.setItem('lumiere_theme', 'dark');
+        } else {
+            document.body.classList.remove('dark-theme');
+            themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            localStorage.setItem('lumiere_theme', 'light');
+        }
+    };
+
+    themeBtn.onclick = () => {
+        const isDark = !document.body.classList.contains('dark-theme');
+        setTheme(isDark);
+    };
+
+    // Бет жүктелгенде сақталған тақырыпты тексеру
+    if (localStorage.getItem('lumiere_theme') === 'dark') setTheme(true);
+
+    // 2. РЕЖИМДІ АУЫСТЫРУ (КІРУ / ТІРКЕЛУ)
+    toggleAuth.onclick = (e) => {
+        e.preventDefault();
+        isLoginMode = !isLoginMode;
+        
+        authTitle.innerText = isLoginMode ? "Кіру" : "Тіркелу";
+        mainBtn.innerText = isLoginMode ? "ЕНУ" : "РАСТАУ";
+        toggleAuth.innerText = isLoginMode ? "ТІРКЕЛУ" : "КІРУ";
+        toggleText.innerText = isLoginMode ? "АККАУНТ ЖОҚ ПА?" : "АККАУНТЫҢЫЗ БАР МА?";
+        
+        regFields.style.display = isLoginMode ? "none" : "block";
+        
+        // Пароль генераторы мен күрделілік мәтіні тек ТІРКЕЛУДЕ көрінеді
+        genBtn.style.display = isLoginMode ? "none" : "block";
+        strengthText.style.display = isLoginMode ? "none" : "block";
+        
+        // Өрістерді тазалау
+        passInput.value = "";
+        strengthText.innerText = "";
+        startTime = Date.now();
+    };
+
+    // 3. ҚҰПИЯ СӨЗ ГЕНЕРАТОРЫ (СИҚЫРЛЫ ТАЯҚША)
+    genBtn.onclick = () => {
+        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+        let password = "";
+        for (let i = 0; i < 12; i++) {
+            password += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        passInput.value = password;
+        passInput.type = "text"; // Парольді көрсету
+        checkStrength(password);
+    };
+
+    // 4. КҮРДЕЛІЛІКТІ ТЕКСЕРУ (ТЕК ТІРКЕЛУ ҮШІН)
+    const checkStrength = (p) => {
+        if (isLoginMode) return true; // Кіру кезінде тексермейміз
+
+        let msg = "";
+        const hasLetters = /[a-zA-Z]/.test(p);
+        const hasNumbers = /[0-9]/.test(p);
+        
+        if (p.length === 0) {
+            msg = "";
+        } else if (p.length < 8) {
+            msg = "❌ Кемінде 8 символ керек";
+            strengthText.style.color = "#ff4d4d";
+        } else if (!hasLetters || !hasNumbers) {
+            msg = "⚠️ Әріптер мен сандарды араластырыңыз";
+            strengthText.style.color = "#ffa500";
+        } else {
+            msg = "✅ Құпия сөз күрделі";
+            strengthText.style.color = "#4CAF50";
+        }
+        strengthText.innerText = msg;
+        return msg.includes("✅");
+    };
+
+    passInput.oninput = (e) => checkStrength(e.target.value);
+
+    // 5. АВТОРИЗАЦИЯ / ТІРКЕЛУ ФУНКЦИЯСЫ
+    mainBtn.onclick = async () => {
+        const username = document.getElementById('login').value;
+        const password = passInput.value;
+
+        if (!username || !password) {
+            alert("Барлық өрісті толтырыңыз!");
+            return;
+        }
+
+        // Тіркелу кезінде пароль күрделілігін міндеттеу
+        if (!isLoginMode && !checkStrength(password)) {
+            alert("Құпия сөз талапқа сай емес!");
+            return;
+        }
+
+        let bodyData = { username, password };
+        const url = isLoginMode ? '/api/login/' : '/api/register/';
+
+        if (!isLoginMode) {
+            bodyData.email = document.getElementById('email').value;
+            bodyData.phone = document.getElementById('phone').value;
+        }
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyData),
+                credentials: 'include'
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                if (isLoginMode) {
+                    localStorage.setItem('currentUser', JSON.stringify(result.user));
+                    const totalSec = ((Date.now() - startTime) / 1000).toFixed(2);
+                    document.getElementById('statsModal').style.display = 'flex';
+                    document.getElementById('timeResult').innerText = `Сессия уақыты: ${totalSec} сек`;
+                    document.getElementById('errorResult').innerText = `Қате әрекеттер: ${errorCount}`;
+                } else {
+                    alert("Тіркелу сәтті аяқталды!");
+                    toggleAuth.click(); // Автоматты түрде Кіру режиміне өту
+                }
+            } else {
+                errorCount++;
+                alert(result.message || "Қате орын алды");
+            }
+        } catch (error) {
+            alert("Сервермен байланыс үзілді!");
+        }
+    };
+
+    // Пайдаланушылар тізімін datalist үшін жүктеу
+    async function loadUserSuggestions() {
+    console.log("Тізімді жүктеу басталды...");
+    try {
+        const response = await fetch('http://127.0.0.1:8000/api/get_helpers/');
+        
+        if (!response.ok) {
+            throw new Error(`Сервер қатесі: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("Серверден келген деректер:", result); // Консольден тексеріңіз
+        
+        if (result.status === 'success' && result.helpers) {
+            const dataList = document.getElementById('usersList');
+            dataList.innerHTML = ""; 
+            
+            result.helpers.forEach(helper => {
+                const option = document.createElement('option');
+                option.value = helper.username; 
+                dataList.appendChild(option);
+            });
+            console.log("Datalist сәтті толтырылды!");
+        }
+    } catch (error) {
+        console.error("Қате орын алды:", error);
+    }
+}
+
+    document.addEventListener('DOMContentLoaded', loadUserSuggestions);
+</script>
+
+</body>
+</html>
